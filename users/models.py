@@ -17,7 +17,7 @@ class AuthUserManager(BaseUserManager):
         Creates and saves a user with the given email and password.
         """
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError("Users must have an email address")
 
         # force whole email to lowercase. violates spec but better usability.
         user = self.model(email=email.lower().strip())
@@ -29,22 +29,23 @@ class AuthUserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, email, password, creation_ip=None,
-            creation_user_agent=None):
+    def create_superuser(
+        self, email, password, creation_ip=None, creation_user_agent=None
+    ):
         """
         Creates and saves a superuser with the given email and password.
         """
         if not creation_ip:
-            creation_ip = '127.0.0.1'
+            creation_ip = "127.0.0.1"
         if not creation_user_agent:
-            creation_user_agent = 'admin'
+            creation_user_agent = "admin"
 
         user = self.create_user(
-                email=email,
-                password=password,
-                creation_ip=creation_ip,
-                creation_user_agent=creation_user_agent,
-                )
+            email=email,
+            password=password,
+            creation_ip=creation_ip,
+            creation_user_agent=creation_user_agent,
+        )
         user.is_superuser = True
         user.is_staff = True
         user.save()
@@ -59,7 +60,7 @@ class AuthUser(AbstractBaseUser):
 
     email = models.EmailField(max_length=128, unique=True)
 
-    is_active = models.BooleanField(default=True, help_text='Can login?')
+    is_active = models.BooleanField(default=True, help_text="Can login?")
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
@@ -70,16 +71,16 @@ class AuthUser(AbstractBaseUser):
 
     objects = AuthUserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
 
     def __str__(self):
-        return '%s: %s' % (self.id, self.email)
+        return "%s: %s" % (self.id, self.email)
 
     def get_full_name(self):
         if self.first_name and self.last_name:
-            return '%s %s' % (self.first_name, self.last_name)
+            return "%s %s" % (self.first_name, self.last_name)
         else:
-            return ''
+            return ""
 
     def get_short_name(self):
         return self.first_name
@@ -95,16 +96,15 @@ class AuthUser(AbstractBaseUser):
         return self.is_superuser
 
     def get_login_uri(self):
-        return '%s?e=%s' % (reverse_lazy('user_login'), self.email)
+        return "%s?e=%s" % (reverse_lazy("user_login"), self.email)
 
     def get_address_subscriptions(self):
         return self.addresssubscription_set.filter(
-                unsubscribed_at=None,
-                disabled_at=None,
-                ).order_by('-id')
+            unsubscribed_at=None, disabled_at=None,
+        ).order_by("-id")
 
     def get_address_forwardings(self):
-        return self.addressforwarding_set.filter(archived_at=None).order_by('-id')
+        return self.addressforwarding_set.filter(archived_at=None).order_by("-id")
 
     def send_pwreset_email(self):
         """
@@ -112,27 +112,29 @@ class AuthUser(AbstractBaseUser):
         """
         # TODO: add some sort of throttling
         return send_and_log(
-                subject='Blockcypher Password Reset',
-                body_template='password_reset.html',
-                to_user=self,
-                body_context={},
-                fkey_objs={'auth_user': self},
-                )
+            subject="Blockcypher Password Reset",
+            body_template="password_reset.html",
+            to_user=self,
+            body_context={},
+            fkey_objs={"auth_user": self},
+        )
 
 
 class LoggedLogin(models.Model):
     login_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    auth_user = models.ForeignKey(AuthUser, blank=False, null=False, on_delete=models.CASCADE)
+    auth_user = models.ForeignKey(
+        AuthUser, blank=False, null=False, on_delete=models.CASCADE
+    )
     ip_address = models.GenericIPAddressField(null=False, blank=False, db_index=True)
     user_agent = models.CharField(max_length=1024, blank=True, db_index=True)
 
     def __str__(self):
-        return '%s: %s' % (self.id, self.ip_address)
+        return "%s: %s" % (self.id, self.ip_address)
 
     @classmethod
     def record_login(cls, request):
         return cls.objects.create(
-                auth_user=request.user,
-                ip_address=get_client_ip(request),
-                user_agent=get_user_agent(request),
-                )
+            auth_user=request.user,
+            ip_address=get_client_ip(request),
+            user_agent=get_user_agent(request),
+        )

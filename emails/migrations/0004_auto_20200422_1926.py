@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('emails', '0003_sentemail_address_forwarding'),
+        ("emails", "0003_sentemail_address_forwarding"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='sentemail',
-            name='unsub_ip',
+            model_name="sentemail",
+            name="unsub_ip",
             field=models.GenericIPAddressField(blank=True, db_index=True, null=True),
         ),
         migrations.AlterField(
-            model_name='sentemail',
-            name='verif_ip',
+            model_name="sentemail",
+            name="verif_ip",
             field=models.GenericIPAddressField(blank=True, db_index=True, null=True),
         ),
     ]

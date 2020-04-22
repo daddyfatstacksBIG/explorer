@@ -6,18 +6,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('addresses', '0006_auto_20160105_1619'),
+        ("addresses", "0006_auto_20160105_1619"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='addressforwarding',
-            name='coin_symbol',
-            field=models.CharField(choices=[('btc', 'Bitcoin'), ('btc-testnet', 'Bitcoin Testnet'), ('ltc', 'Litecoin'), ('doge', 'Dogecoin'), ('dash', 'Dash'), ('bcy', 'BlockCypher Testnet')], db_index=True, max_length=16),
+            model_name="addressforwarding",
+            name="coin_symbol",
+            field=models.CharField(
+                choices=[
+                    ("btc", "Bitcoin"),
+                    ("btc-testnet", "Bitcoin Testnet"),
+                    ("ltc", "Litecoin"),
+                    ("doge", "Dogecoin"),
+                    ("dash", "Dash"),
+                    ("bcy", "BlockCypher Testnet"),
+                ],
+                db_index=True,
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='addresssubscription',
-            name='coin_symbol',
-            field=models.CharField(choices=[('btc', 'Bitcoin'), ('btc-testnet', 'Bitcoin Testnet'), ('ltc', 'Litecoin'), ('doge', 'Dogecoin'), ('dash', 'Dash'), ('bcy', 'BlockCypher Testnet')], db_index=True, max_length=16),
+            model_name="addresssubscription",
+            name="coin_symbol",
+            field=models.CharField(
+                choices=[
+                    ("btc", "Bitcoin"),
+                    ("btc-testnet", "Bitcoin Testnet"),
+                    ("ltc", "Litecoin"),
+                    ("doge", "Dogecoin"),
+                    ("dash", "Dash"),
+                    ("bcy", "BlockCypher Testnet"),
+                ],
+                db_index=True,
+                max_length=16,
+            ),
         ),
     ]
