@@ -1,7 +1,8 @@
-from addresses import views as addresses_views
-from blocks import views as blocks_views
 from django.conf.urls import url
 from django.contrib import admin
+
+from addresses import views as addresses_views
+from blocks import views as blocks_views
 from homepage import views as homepage_views
 from metadata import views as metadata_views
 from transactions import views as transactions_views

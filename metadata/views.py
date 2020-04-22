@@ -2,18 +2,24 @@ import json
 from random import choice
 
 from annoying.decorators import render_to
-from blockcypher.api import (get_block_overview, get_latest_block_hash,
-                             get_metadata, put_metadata)
+from blockcypher.api import get_block_overview
+from blockcypher.api import get_latest_block_hash
+from blockcypher.api import get_metadata
+from blockcypher.api import put_metadata
 from blockcypher.constants import COIN_SYMBOL_MAPPINGS
-from blockcypher.utils import is_valid_address_for_coinsymbol, is_valid_hash
-from blockexplorer.decorators import assert_valid_coin_symbol
-from blockexplorer.settings import BLOCKCYPHER_API_KEY
+from blockcypher.utils import is_valid_address_for_coinsymbol
+from blockcypher.utils import is_valid_hash
 from django.contrib import messages
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+
+from blockexplorer.decorators import assert_valid_coin_symbol
+from blockexplorer.settings import BLOCKCYPHER_API_KEY
 from metadata.forms import BaseMetadataForm
 
 

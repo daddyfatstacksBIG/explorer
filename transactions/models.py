@@ -1,5 +1,6 @@
 from blockcypher.utils import format_crypto_units
 from django.db import models
+
 from emails.trigger import send_and_log
 
 

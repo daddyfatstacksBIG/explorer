@@ -3,7 +3,9 @@ from datetime import timedelta
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -11,11 +13,17 @@ from django.urls import reverse_lazy
 from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
+
 from emails.models import SentEmail
-from users.forms import (ChangePWForm, LoginForm, PWResetForm,
-                         RegistrationForm, SetPWForm)
-from users.models import AuthUser, LoggedLogin
-from utils import get_client_ip, get_user_agent
+from users.forms import ChangePWForm
+from users.forms import LoginForm
+from users.forms import PWResetForm
+from users.forms import RegistrationForm
+from users.forms import SetPWForm
+from users.models import AuthUser
+from users.models import LoggedLogin
+from utils import get_client_ip
+from utils import get_user_agent
 
 
 @render_to("admin/login.html")

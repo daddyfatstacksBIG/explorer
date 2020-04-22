@@ -2,17 +2,24 @@ import json
 from binascii import unhexlify
 
 from annoying.decorators import render_to
-from blockcypher.api import (decodetx, embed_data, get_broadcast_transactions,
-                             get_transaction_details, pushtx)
+from blockcypher.api import decodetx
+from blockcypher.api import embed_data
+from blockcypher.api import get_broadcast_transactions
+from blockcypher.api import get_transaction_details
+from blockcypher.api import pushtx
 from blockcypher.constants import COIN_SYMBOL_MAPPINGS
-from blockexplorer.decorators import assert_valid_coin_symbol
-from blockexplorer.settings import BLOCKCYPHER_API_KEY, BLOCKCYPHER_PUBLIC_KEY
 from django.contrib import messages
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from transactions.forms import EmbedDataForm, RawTXForm
+
+from blockexplorer.decorators import assert_valid_coin_symbol
+from blockexplorer.settings import BLOCKCYPHER_API_KEY
+from blockexplorer.settings import BLOCKCYPHER_PUBLIC_KEY
+from transactions.forms import EmbedDataForm
+from transactions.forms import RawTXForm
 
 
 def scale_confidence(confidence):
