@@ -16,7 +16,7 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
-LOCALE_PATHS = (PROJECT_PATH + "/locale/",)
+LOCALE_PATHS = (PROJECT_PATH + "/locale/", )
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -47,7 +47,7 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 
-ADMINS = (("Michael Flaxman", "mflaxman@gmail.com"),)
+ADMINS = (("Michael Flaxman", "mflaxman@gmail.com"), )
 
 IGNORABLE_404_URLS = (
     re.compile(r"^/apple-touch-icon.*\.png$"),
@@ -114,13 +114,13 @@ LOGIN_URL = "/login"
 
 # Languages
 LANGUAGE_CODE = "en-us"
-LANGUAGES = (("en-us", "English"),)
+LANGUAGES = (("en-us", "English"), )
 if os.getenv("ENABLE_TRANSLATIONS") == "False":
     ENABLE_TRANSLATIONS = False
 else:
     ENABLE_TRANSLATIONS = True
-    MIDDLEWARE += ("django.middleware.locale.LocaleMiddleware",)
-    LANGUAGES += (("es", "Spanish"),)
+    MIDDLEWARE += ("django.middleware.locale.LocaleMiddleware", )
+    LANGUAGES += (("es", "Spanish"), )
 
 # Yay crispy forms
 CRISPY_TEMPLATE_PACK = "bootstrap3"
@@ -129,33 +129,32 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = ("bootstrap", "bootstrap3")
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATICFILES_DIRS = (os.path.join(PROJECT_PATH, "static"),)
+STATICFILES_DIRS = (os.path.join(PROJECT_PATH, "static"), )
 STATIC_ROOT = "staticfiles"
 STATIC_URL = "/static/"
 
-TEMPLATES = [
-    {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "APP_DIRS": True,
-        "DIRS": (os.path.join(PROJECT_PATH, "templates"),),
-        "OPTIONS": {
-            "context_processors": [
-                "blockexplorer.context_processors.get_user_units",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-                "django.contrib.auth.context_processors.auth",
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.template.context_processors.i18n",
-                "django.template.context_processors.media",
-                "django.template.context_processors.static",
-                "django.template.context_processors.tz",
-                "django.template.context_processors.request",
-            ],
-            "debug": TDEBUG,
-        },
-    }
-]
+TEMPLATES = [{
+    "BACKEND": "django.template.backends.django.DjangoTemplates",
+    "APP_DIRS": True,
+    "DIRS": (os.path.join(PROJECT_PATH, "templates"), ),
+    "OPTIONS": {
+        "context_processors": [
+            "blockexplorer.context_processors.get_user_units",
+            "django.contrib.auth.context_processors.auth",
+            "django.contrib.messages.context_processors.messages",
+            "django.contrib.auth.context_processors.auth",
+            "django.template.context_processors.debug",
+            "django.template.context_processors.request",
+            "django.template.context_processors.i18n",
+            "django.template.context_processors.media",
+            "django.template.context_processors.static",
+            "django.template.context_processors.tz",
+            "django.template.context_processors.request",
+        ],
+        "debug":
+        TDEBUG,
+    },
+}]
 
 PRODUCTION_DOMAIN = "live.blockcypher.com"
 STAGING_DOMAIN = "TODO"
@@ -168,13 +167,12 @@ if SITE_DOMAIN in (PRODUCTION_DOMAIN, STAGING_DOMAIN):
     # FIXME:
     # SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    MIDDLEWARE += ("blockexplorer.middleware.SSLMiddleware",)
+    MIDDLEWARE += ("blockexplorer.middleware.SSLMiddleware", )
 else:
     BASE_URL = "http://%s" % SITE_DOMAIN
     if not DISABLE_DEBUG_TOOLBAR:
         # FIXME: this should work on staging too, but I can't get it to work with gunicorn
         DEBUG_TOOLBAR_PATCH_SETTINGS = True
-
 
 IS_PRODUCTION = SITE_DOMAIN == PRODUCTION_DOMAIN
 
@@ -184,8 +182,9 @@ else:
     EMAIL_DEV_PREFIX = True
     if not DISABLE_DEBUG_TOOLBAR:
         # Enable debug toolbar on local and staging
-        MIDDLEWARE = ("debug_toolbar.middleware.DebugToolbarMiddleware",) + MIDDLEWARE
-        INSTALLED_APPS += ("debug_toolbar",)
+        MIDDLEWARE = (
+            "debug_toolbar.middleware.DebugToolbarMiddleware", ) + MIDDLEWARE
+        INSTALLED_APPS += ("debug_toolbar", )
 
 if not DISABLE_DEBUG_TOOLBAR:
     # Debug Toolbar
@@ -222,16 +221,21 @@ LOGGING = {
     "version": 1,
     # https://docs.djangoproject.com/en/dev/topics/logging/#configuring-logging
     "disable_existing_loggers": True,
-    "root": {"level": "WARNING", "handlers": ["sentry", "console"],},
+    "root": {
+        "level": "WARNING",
+        "handlers": ["sentry", "console"],
+    },
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+            "format":
+            "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
         },
     },
     "handlers": {
         "sentry": {
             "level": "ERROR",
-            "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
+            "class":
+            "raven.contrib.django.raven_compat.handlers.SentryHandler",
         },
         "console": {
             "level": "DEBUG",
@@ -245,7 +249,11 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": False,
         },
-        "raven": {"level": "DEBUG", "handlers": ["console"], "propagate": False,},
+        "raven": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": False,
+        },
         "sentry.errors": {
             "level": "DEBUG",
             "handlers": ["console"],

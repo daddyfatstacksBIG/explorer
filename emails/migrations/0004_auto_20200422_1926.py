@@ -13,11 +13,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="sentemail",
             name="unsub_ip",
-            field=models.GenericIPAddressField(blank=True, db_index=True, null=True),
+            field=models.GenericIPAddressField(blank=True,
+                                               db_index=True,
+                                               null=True),
         ),
         migrations.AlterField(
             model_name="sentemail",
             name="verif_ip",
-            field=models.GenericIPAddressField(blank=True, db_index=True, null=True),
+            field=models.GenericIPAddressField(blank=True,
+                                               db_index=True,
+                                               null=True),
         ),
     ]

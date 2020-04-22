@@ -103,7 +103,8 @@ def address_overview(request, coin_symbol, address, wallet_name=None):
     except AssertionError:
         msg = _("Invalid Address")
         messages.warning(request, msg)
-        redir_url = reverse("coin_overview", kwargs={"coin_symbol": coin_symbol})
+        redir_url = reverse("coin_overview",
+                            kwargs={"coin_symbol": coin_symbol})
         return HttpResponseRedirect(redir_url)
 
     # import pprint; pprint.pprint(address_details, width=1)
@@ -116,30 +117,33 @@ def address_overview(request, coin_symbol, address, wallet_name=None):
     if request.user.is_authenticated:
         # notify user on page of any forwarding or subscriptions they may have
         for address_subscription in AddressSubscription.objects.filter(
-            auth_user=request.user,
-            b58_address=address,
-            coin_symbol=coin_symbol,
-            unsubscribed_at=None,
+                auth_user=request.user,
+                b58_address=address,
+                coin_symbol=coin_symbol,
+                unsubscribed_at=None,
         ):
             if address_subscription.auth_user.email_verified:
                 msg = _(
                     'Private Message: you are subscribed to this address and will receive email notifications at <b>%(user_email)s</b> (<a href="%(unsub_url)s">unsubscribe</a>)'
                     % {
-                        "user_email": request.user.email,
-                        "unsub_url": reverse(
+                        "user_email":
+                        request.user.email,
+                        "unsub_url":
+                        reverse(
                             "user_unsubscribe_address",
                             kwargs={
-                                "address_subscription_id": address_subscription.id,
+                                "address_subscription_id":
+                                address_subscription.id,
                             },
                         ),
-                    }
-                )
+                    })
                 messages.info(request, msg, extra_tags="safe")
             else:
                 msg = _(
                     "Private Message: you are not subscribed to this address because you have not clicked the link sent to <b>%(user_email)s</b>"
-                    % {"user_email": request.user.email,}
-                )
+                    % {
+                        "user_email": request.user.email,
+                    })
                 messages.error(request, msg, extra_tags="safe")
                 print("ERROR")
 
@@ -156,45 +160,47 @@ def address_overview(request, coin_symbol, address, wallet_name=None):
             Private Message: this address will automatically forward to <a href="%(destination_addr_uri)s">%(destination_address)s</a>
             any time a payment is received.
             <br /><br /> <i>%(small_payments_msg)s</i>
-            """
-                % {
-                    "destination_address": af_initial.destination_address,
-                    "destination_addr_uri": reverse(
+            """ % {
+                    "destination_address":
+                    af_initial.destination_address,
+                    "destination_addr_uri":
+                    reverse(
                         "address_overview",
                         kwargs={
                             "address": af_initial.destination_address,
                             "coin_symbol": coin_symbol,
                         },
                     ),
-                    "small_payments_msg": SMALL_PAYMENTS_MSG,
-                }
-            )
+                    "small_payments_msg":
+                    SMALL_PAYMENTS_MSG,
+                })
             messages.info(request, msg, extra_tags="safe")
 
         # There could be many
         for af_destination in AddressForwarding.objects.filter(
-            auth_user=request.user,
-            destination_address=address,
-            coin_symbol=coin_symbol,
+                auth_user=request.user,
+                destination_address=address,
+                coin_symbol=coin_symbol,
         ):
             msg = _(
                 """
             Private Message: this address will automatically receive forwarded transactions from
             <a href="%(initial_addr_uri)s">%(initial_address)s</a>.
             <br /><br /> <i>%(small_payments_msg)s</i>
-            """
-                % {
-                    "initial_address": af_destination.initial_address,
-                    "initial_addr_uri": reverse(
+            """ % {
+                    "initial_address":
+                    af_destination.initial_address,
+                    "initial_addr_uri":
+                    reverse(
                         "address_overview",
                         kwargs={
                             "address": af_destination.initial_address,
                             "coin_symbol": coin_symbol,
                         },
                     ),
-                    "small_payments_msg": SMALL_PAYMENTS_MSG,
-                }
-            )
+                    "small_payments_msg":
+                    SMALL_PAYMENTS_MSG,
+                })
             messages.info(request, msg, extra_tags="safe")
 
     all_transactions = address_details.get("txs", [])
@@ -326,13 +332,18 @@ def subscribe_address(request, coin_symbol):
 
                 address_uri = reverse(
                     "address_overview",
-                    kwargs={"coin_symbol": coin_symbol, "address": coin_address,},
+                    kwargs={
+                        "coin_symbol": coin_symbol,
+                        "address": coin_address,
+                    },
                 )
                 if already_authenticated and auth_user.email_verified:
                     msg = _(
                         'You will now be emailed notifications for <a href="%(address_uri)s">%(coin_address)s</a>'
-                        % {"coin_address": coin_address, "address_uri": address_uri,}
-                    )
+                        % {
+                            "coin_address": coin_address,
+                            "address_uri": address_uri,
+                        })
                     messages.success(request, msg, extra_tags="safe")
                     return HttpResponseRedirect(reverse("dashboard"))
                 else:
@@ -364,9 +375,8 @@ def user_unsubscribe_address(request, address_subscription_id):
     """
     For logged-in users to unsubscribe an address
     """
-    address_subscription = get_object_or_404(
-        AddressSubscription, id=address_subscription_id
-    )
+    address_subscription = get_object_or_404(AddressSubscription,
+                                             id=address_subscription_id)
     assert address_subscription.auth_user == request.user
 
     if address_subscription.unsubscribed_at:
@@ -387,8 +397,7 @@ def user_unsubscribe_address(request, address_subscription_id):
             % {
                 "b58_address": address_subscription.b58_address,
                 "address_uri": address_uri,
-            }
-        )
+            })
         messages.success(request, msg, extra_tags="safe")
 
     return HttpResponseRedirect(reverse("dashboard"))
@@ -403,7 +412,8 @@ def user_archive_forwarding_address(request, address_forwarding_id):
     We just stop displaying it in the UI.
     For now we don't automatically stop sending email notices, though we may want to do that in the future.
     """
-    address_forwarding = get_object_or_404(AddressForwarding, id=address_forwarding_id)
+    address_forwarding = get_object_or_404(AddressForwarding,
+                                           id=address_forwarding_id)
     assert address_forwarding.auth_user == request.user
 
     if address_forwarding.archived_at:
@@ -432,14 +442,12 @@ def user_archive_forwarding_address(request, address_forwarding_id):
         You have archived the forwarding address <a href="%(initial_addr_uri)s">%(initial_address)s</a>.
         For security, payments sent to <a href="%(destination_addr_uri)s">%(destination_address)s</a>
         may continue to forward to <a href="%(initial_addr_uri)s">%(initial_address)s</a>.
-        """
-            % {
+        """ % {
                 "initial_address": address_forwarding.initial_address,
                 "destination_address": address_forwarding.destination_address,
                 "initial_addr_uri": initial_addr_uri,
                 "destination_addr_uri": destination_addr_uri,
-            }
-        )
+            })
         messages.success(request, msg, extra_tags="safe")
 
     return HttpResponseRedirect(reverse("dashboard"))
@@ -481,8 +489,10 @@ def unsubscribe_address(request, unsub_code):
 
         msg = _(
             'You have been unsubscribed from notifications on <a href="%(addr_uri)s">%(b58_address)s</a>'
-            % {"b58_address": address_subscription.b58_address, "addr_uri": addr_uri,}
-        )
+            % {
+                "b58_address": address_subscription.b58_address,
+                "addr_uri": addr_uri,
+            })
         messages.info(request, msg, extra_tags="safe")
 
     return HttpResponseRedirect(reverse("dashboard"))
@@ -495,7 +505,8 @@ def address_webhook(request, secret_key, ignored_key):
     """
 
     # Log webhook
-    webhook = WebHook.log_webhook(request, WebHook.BLOCKCYPHER_ADDRESS_NOTIFICATION)
+    webhook = WebHook.log_webhook(request,
+                                  WebHook.BLOCKCYPHER_ADDRESS_NOTIFICATION)
 
     assert secret_key == WEBHOOK_SECRET_KEY
     assert request.method == "POST", "Request has no post"
@@ -506,8 +517,7 @@ def address_webhook(request, secret_key, ignored_key):
     payload = json.loads(request.body.decode())
 
     address_subscription = AddressSubscription.objects.get(
-        blockcypher_id=blockcypher_id
-    )
+        blockcypher_id=blockcypher_id)
 
     tx_hash = payload["hash"]
     num_confs = payload["confirmations"]
@@ -516,7 +526,9 @@ def address_webhook(request, secret_key, ignored_key):
     fee_in_satoshis = payload["fees"]
 
     tx_event = get_object_or_None(
-        OnChainTransaction, tx_hash=tx_hash, address_subscription=address_subscription,
+        OnChainTransaction,
+        tx_hash=tx_hash,
+        address_subscription=address_subscription,
     )
 
     if tx_event:
@@ -559,10 +571,8 @@ def address_webhook(request, secret_key, ignored_key):
     # email sending logic
     # TODO: add logic for notify on deposit vs withdrawal
     # TODO: add safety check to prevent duplicate email sending
-    if (
-        tx_event.address_subscription.unsubscribed_at
-        or tx_event.address_subscription.disabled_at
-    ):
+    if (tx_event.address_subscription.unsubscribed_at
+            or tx_event.address_subscription.disabled_at):
         # unsubscribe from webhooks going forward
         try:
             unsub_result = unsubscribe_from_webhook(
@@ -581,7 +591,8 @@ def address_webhook(request, secret_key, ignored_key):
 
         earliest_dt = now() - timedelta(days=3)
         recent_emails_sent = SentEmail.objects.filter(
-            address_subscription=tx_event.address_subscription, sent_at__gt=earliest_dt,
+            address_subscription=tx_event.address_subscription,
+            sent_at__gt=earliest_dt,
         ).count()
 
         if recent_emails_sent > 100:
@@ -600,29 +611,21 @@ def address_webhook(request, secret_key, ignored_key):
             elif num_confs == 0 and tx_is_new:
                 # First broadcast
                 if tx_event.address_subscription.notify_on_broadcast:
-                    if (
-                        tx_event.is_deposit
-                        and tx_event.address_subscription.notify_on_deposit
-                    ):
+                    if (tx_event.is_deposit and
+                            tx_event.address_subscription.notify_on_deposit):
                         tx_event.send_unconfirmed_tx_email()
-                    elif (
-                        tx_event.is_withdrawal
-                        and tx_event.address_subscription.notify_on_withdrawal
-                    ):
+                    elif (tx_event.is_withdrawal and
+                          tx_event.address_subscription.notify_on_withdrawal):
                         tx_event.send_unconfirmed_tx_email()
 
             elif num_confs == 6:
                 # Sixth confirm
                 if tx_event.address_subscription.notify_on_sixth_confirm:
-                    if (
-                        tx_event.is_deposit
-                        and tx_event.address_subscription.notify_on_deposit
-                    ):
+                    if (tx_event.is_deposit and
+                            tx_event.address_subscription.notify_on_deposit):
                         tx_event.send_confirmed_tx_email()
-                    elif (
-                        tx_event.is_withdrawal
-                        and tx_event.address_subscription.notify_on_withdrawal
-                    ):
+                    elif (tx_event.is_withdrawal and
+                          tx_event.address_subscription.notify_on_withdrawal):
                         tx_event.send_confirmed_tx_email()
     else:
         # active subscription with unverfied email (can't contact)
@@ -642,9 +645,9 @@ def address_webhook(request, secret_key, ignored_key):
 @xframe_options_exempt
 @render_to("balance_widget.html")
 def render_balance_widget(request, coin_symbol, address):
-    address_overview = get_address_overview(
-        address=address, coin_symbol=coin_symbol, api_key=BLOCKCYPHER_API_KEY
-    )
+    address_overview = get_address_overview(address=address,
+                                            coin_symbol=coin_symbol,
+                                            api_key=BLOCKCYPHER_API_KEY)
     return {
         "address_overview": address_overview,
         "coin_symbol": coin_symbol,
@@ -656,9 +659,9 @@ def render_balance_widget(request, coin_symbol, address):
 @xframe_options_exempt
 @render_to("received_widget.html")
 def render_received_widget(request, coin_symbol, address):
-    address_overview = get_address_overview(
-        address=address, coin_symbol=coin_symbol, api_key=BLOCKCYPHER_API_KEY
-    )
+    address_overview = get_address_overview(address=address,
+                                            coin_symbol=coin_symbol,
+                                            api_key=BLOCKCYPHER_API_KEY)
     return {
         "address_overview": address_overview,
         "coin_symbol": coin_symbol,
@@ -740,13 +743,15 @@ def setup_address_forwarding(request, coin_symbol):
 
                 if user_email:
                     # Check for existing user with that email
-                    existing_user = get_object_or_None(AuthUser, email=user_email)
+                    existing_user = get_object_or_None(AuthUser,
+                                                       email=user_email)
                     if existing_user:
                         msg = _(
                             "Please first login to this account to create a notification"
                         )
                         messages.info(request, msg)
-                        return HttpResponseRedirect(existing_user.get_login_uri())
+                        return HttpResponseRedirect(
+                            existing_user.get_login_uri())
 
                     else:
                         # Create user with unknown (random) password
@@ -773,15 +778,16 @@ def setup_address_forwarding(request, coin_symbol):
             forwarding_address_details = get_forwarding_address_details(
                 destination_address=destination_address,
                 api_key=BLOCKCYPHER_API_KEY,
-                callback_url=None,  # notifications happen separately (and not always)
+                callback_url=
+                None,  # notifications happen separately (and not always)
                 coin_symbol=coin_symbol,
             )
 
             if "error" in forwarding_address_details:
                 # Display error message back to user
-                messages.warning(
-                    request, forwarding_address_details["error"], extra_tags="safe"
-                )
+                messages.warning(request,
+                                 forwarding_address_details["error"],
+                                 extra_tags="safe")
 
             else:
 
@@ -796,9 +802,8 @@ def setup_address_forwarding(request, coin_symbol):
                     blockcypher_id=forwarding_address_details["id"],
                 )
 
-                subscribe_uri = reverse(
-                    "subscribe_address", kwargs={"coin_symbol": coin_symbol}
-                )
+                subscribe_uri = reverse("subscribe_address",
+                                        kwargs={"coin_symbol": coin_symbol})
                 uri_qs = {"a": initial_address}
                 if user_email:
                     uri_qs["e"] = user_email
@@ -808,7 +813,10 @@ def setup_address_forwarding(request, coin_symbol):
 
                 initial_addr_uri = reverse(
                     "address_overview",
-                    kwargs={"coin_symbol": coin_symbol, "address": initial_address,},
+                    kwargs={
+                        "coin_symbol": coin_symbol,
+                        "address": initial_address,
+                    },
                 )
                 destination_addr_uri = reverse(
                     "address_overview",
@@ -829,9 +837,8 @@ def setup_address_forwarding(request, coin_symbol):
                     msg_merge_dict["user_email"] = auth_user.email
 
                 if user_email or (
-                    already_authenticated
-                    and form.cleaned_data["wants_email_notification"]
-                ):
+                        already_authenticated
+                        and form.cleaned_data["wants_email_notification"]):
 
                     # Create an address subscription for all of these cases
 
@@ -865,78 +872,66 @@ def setup_address_forwarding(request, coin_symbol):
 
                     if user_email:
                         # New signup
-                        msg = _(
-                            """
+                        msg = _("""
                         Transactions sent to <a href="%(initial_addr_uri)s">%(initial_address)s</a>
                         will now be automatically forwarded to <a href="%(destination_addr_uri)s">%(destination_address)s</a>,
                         but you must confirm your email to receive notifications.
                         <br /><br /> <i>%(small_payments_msg)s</i>
-                        """
-                            % msg_merge_dict
-                        )
+                        """ % msg_merge_dict)
                         messages.success(request, msg, extra_tags="safe")
 
                         address_forwarding_obj.send_forwarding_welcome_email()
-                        return HttpResponseRedirect(reverse("unconfirmed_email"))
+                        return HttpResponseRedirect(
+                            reverse("unconfirmed_email"))
                     else:
                         if auth_user.email_verified:
 
-                            msg = _(
-                                """
+                            msg = _("""
                             Transactions sent to <a href="%(initial_addr_uri)s">%(initial_address)s</a>
                             will now be automatically forwarded to <a href="%(destination_addr_uri)s">%(destination_address)s</a>,
                             and you will immediately receive an email notification at <b>%(user_email)s</b>.
                             <br /><br /> <i>%(small_payments_msg)s</i>
-                            """
-                                % msg_merge_dict
-                            )
+                            """ % msg_merge_dict)
                             messages.success(request, msg, extra_tags="safe")
 
                             return HttpResponseRedirect(reverse("dashboard"))
 
                         else:
                             # existing unconfirmed user
-                            msg = _(
-                                """
+                            msg = _("""
                             Transactions sent to <a href="%(initial_addr_uri)s">%(initial_address)s</a>
                             will now be automatically forwarded to <a href="%(destination_addr_uri)s">%(destination_address)s</a>,
                             but you must confirm your email to receive notifications.
                             <br /><br /> <i>%(small_payments_msg)s</i>
-                            """
-                                % msg_merge_dict
-                            )
+                            """ % msg_merge_dict)
                             messages.success(request, msg, extra_tags="safe")
 
-                            address_forwarding_obj.send_forwarding_welcome_email()
+                            address_forwarding_obj.send_forwarding_welcome_email(
+                            )
 
-                            return HttpResponseRedirect(reverse("unconfirmed_email"))
+                            return HttpResponseRedirect(
+                                reverse("unconfirmed_email"))
 
                 elif already_authenticated:
                     # already authenticated and doesn't want subscriptions
-                    msg = _(
-                        """
+                    msg = _("""
                     Transactions sent to <a href="%(initial_addr_uri)s">%(initial_address)s</a>
                     will now be automatically forwarded to <a href="%(destination_addr_uri)s">%(destination_address)s</a>.
                     You will not receive email notifications (<a href="%(subscribe_uri)s">subscribe</a>).
                     <br /><br /> <i>%(small_payments_msg)s</i>
-                    """
-                        % msg_merge_dict
-                    )
+                    """ % msg_merge_dict)
                     messages.success(request, msg, extra_tags="safe")
 
                     return HttpResponseRedirect(reverse("dashboard"))
 
                 else:
                     # New signup sans email
-                    msg = _(
-                        """
+                    msg = _("""
                     Transactions sent to <a href="%(initial_addr_uri)s">%(initial_address)s</a>
                     will now be automatically forwarded to <a href="%(destination_addr_uri)s">%(destination_address)s</a>.
                     You will not receive email notifications (<a href="%(subscribe_uri)s">subscribe</a>).
                     <br /><br /> <i>%(small_payments_msg)s</i>
-                    """
-                        % msg_merge_dict
-                    )
+                    """ % msg_merge_dict)
                     messages.success(request, msg, extra_tags="safe")
 
                     return HttpResponseRedirect(destination_addr_uri)

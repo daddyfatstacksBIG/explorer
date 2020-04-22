@@ -24,16 +24,19 @@ class Migration(migrations.Migration):
                         serialize=False,
                     ),
                 ),
-                ("password", models.CharField(verbose_name="password", max_length=128)),
+                ("password",
+                 models.CharField(verbose_name="password", max_length=128)),
                 (
                     "last_login",
-                    models.DateTimeField(
-                        verbose_name="last login", default=django.utils.timezone.now
-                    ),
+                    models.DateTimeField(verbose_name="last login",
+                                         default=django.utils.timezone.now),
                 ),
-                ("date_joined", models.DateTimeField(db_index=True, auto_now_add=True)),
-                ("first_name", models.CharField(null=True, blank=True, max_length=64)),
-                ("last_name", models.CharField(null=True, blank=True, max_length=64)),
+                ("date_joined",
+                 models.DateTimeField(db_index=True, auto_now_add=True)),
+                ("first_name",
+                 models.CharField(null=True, blank=True, max_length=64)),
+                ("last_name",
+                 models.CharField(null=True, blank=True, max_length=64)),
                 ("email", models.EmailField(unique=True, max_length=128)),
                 (
                     "is_active",
@@ -44,12 +47,17 @@ class Migration(migrations.Migration):
                 ("creation_ip", models.GenericIPAddressField(db_index=True)),
                 (
                     "creation_user_agent",
-                    models.CharField(blank=True, db_index=True, max_length=1024),
+                    models.CharField(blank=True,
+                                     db_index=True,
+                                     max_length=1024),
                 ),
-                ("email_verified", models.BooleanField(default=False, db_index=True)),
+                ("email_verified",
+                 models.BooleanField(default=False, db_index=True)),
             ],
-            options={"abstract": False,},
-            bases=(models.Model,),
+            options={
+                "abstract": False,
+            },
+            bases=(models.Model, ),
         ),
         migrations.CreateModel(
             name="LoggedLogin",
@@ -63,20 +71,22 @@ class Migration(migrations.Migration):
                         serialize=False,
                     ),
                 ),
-                ("login_at", models.DateTimeField(db_index=True, auto_now_add=True)),
+                ("login_at",
+                 models.DateTimeField(db_index=True, auto_now_add=True)),
                 ("ip_address", models.GenericIPAddressField(db_index=True)),
                 (
                     "user_agent",
-                    models.CharField(blank=True, db_index=True, max_length=1024),
+                    models.CharField(blank=True,
+                                     db_index=True,
+                                     max_length=1024),
                 ),
                 (
                     "auth_user",
-                    models.ForeignKey(
-                        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(to=settings.AUTH_USER_MODEL,
+                                      on_delete=models.CASCADE),
                 ),
             ],
             options={},
-            bases=(models.Model,),
+            bases=(models.Model, ),
         ),
     ]

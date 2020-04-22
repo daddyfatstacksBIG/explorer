@@ -51,7 +51,9 @@ def poll_metadata(request, coin_symbol, identifier_type, identifier):
         raise (Http404)
 
     json_response = json.dumps(
-        {"metadata": metadata}, cls=DjangoJSONEncoder, sort_keys=True,
+        {"metadata": metadata},
+        cls=DjangoJSONEncoder,
+        sort_keys=True,
     )
 
     return HttpResponse(json_response, content_type="application/json")
@@ -87,12 +89,14 @@ def add_metadata_to_tx(request, coin_symbol, tx_hash):
                         "key": metadata_key,
                         "value": metadata_value,
                         "upload_string": tx_hash,
-                    }
-                )
+                    })
                 messages.success(request, msg, extra_tags="safe")
                 redir_url = reverse(
                     "transaction_overview",
-                    kwargs={"coin_symbol": coin_symbol, "tx_hash": tx_hash,},
+                    kwargs={
+                        "coin_symbol": coin_symbol,
+                        "tx_hash": tx_hash,
+                    },
                 )
                 return HttpResponseRedirect(redir_url)
             elif "error" in results:
@@ -149,8 +153,7 @@ def add_metadata_to_block(request, coin_symbol, block_hash):
                         "key": metadata_key,
                         "value": metadata_value,
                         "upload_string": block_hash,
-                    }
-                )
+                    })
                 messages.success(request, msg, extra_tags="safe")
                 redir_url = reverse(
                     "block_overview",
@@ -214,12 +217,14 @@ def add_metadata_to_address(request, coin_symbol, address):
                         "key": metadata_key,
                         "value": metadata_value,
                         "upload_string": address,
-                    }
-                )
+                    })
                 messages.success(request, msg, extra_tags="safe")
                 redir_url = reverse(
                     "address_overview",
-                    kwargs={"coin_symbol": coin_symbol, "address": address,},
+                    kwargs={
+                        "coin_symbol": coin_symbol,
+                        "address": address,
+                    },
                 )
                 return HttpResponseRedirect(redir_url)
             elif "error" in results:
@@ -260,7 +265,10 @@ def add_metadata(request, coin_symbol):
 
     redir_url = reverse(
         "add_metadata_to_tx",
-        kwargs={"coin_symbol": coin_symbol, "tx_hash": random_tx_hash},
+        kwargs={
+            "coin_symbol": coin_symbol,
+            "tx_hash": random_tx_hash
+        },
     )
 
     msg = _(
@@ -269,8 +277,7 @@ def add_metadata(request, coin_symbol):
             "cs_display": COIN_SYMBOL_MAPPINGS[coin_symbol]["currency_abbrev"],
             "tx_hash": random_tx_hash,
             "latest_block_num": intcomma(block_overview["height"]),
-        }
-    )
+        })
 
     messages.success(request, msg, extra_tags="safe")
     return HttpResponseRedirect(redir_url)

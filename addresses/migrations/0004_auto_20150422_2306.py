@@ -26,7 +26,8 @@ class Migration(migrations.Migration):
                         primary_key=True,
                     ),
                 ),
-                ("created_at", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("created_at",
+                 models.DateTimeField(auto_now_add=True, db_index=True)),
                 (
                     "archived_at",
                     models.DateTimeField(db_index=True, blank=True, null=True),
@@ -46,9 +47,12 @@ class Migration(migrations.Migration):
                         max_length=16,
                     ),
                 ),
-                ("initial_address", models.CharField(db_index=True, max_length=64)),
-                ("destination_address", models.CharField(db_index=True, max_length=64)),
-                ("blockcypher_id", models.CharField(db_index=True, max_length=64)),
+                ("initial_address",
+                 models.CharField(db_index=True, max_length=64)),
+                ("destination_address",
+                 models.CharField(db_index=True, max_length=64)),
+                ("blockcypher_id",
+                 models.CharField(db_index=True, max_length=64)),
                 (
                     "auth_user",
                     models.ForeignKey(
@@ -60,7 +64,7 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={},
-            bases=(models.Model,),
+            bases=(models.Model, ),
         ),
         migrations.AddField(
             model_name="addresssubscription",

@@ -34,8 +34,7 @@ def home(request):
         initial={
             "search_string": "16Fg2yjwrbtC6fZp61EV9mNVKmwCzGasw5",
             "coin_symbol": "btc",
-        }
-    )
+        })
     if request.method == "POST":
         form = SearchForm(data=request.POST)
         if form.is_valid():
@@ -53,7 +52,8 @@ def home(request):
                         redirect_url = reverse("block_overview", kwargs=kwargs)
                     else:
                         kwargs["tx_hash"] = search_string
-                        redirect_url = reverse("transaction_overview", kwargs=kwargs)
+                        redirect_url = reverse("transaction_overview",
+                                               kwargs=kwargs)
                 elif coin_symbol in SCRYPT_COINS:
                     # Try to see if it's a valid TX hash
                     tx_details = get_transaction_details(
@@ -76,15 +76,16 @@ def home(request):
                                 % {
                                     "currency": coin_symbol,
                                     "search_string": search_string,
-                                }
-                            )
+                                })
                             messages.error(request, msg)
                         else:
                             kwargs["block_representation"] = search_string
-                            redirect_url = reverse("block_overview", kwargs=kwargs)
+                            redirect_url = reverse("block_overview",
+                                                   kwargs=kwargs)
                     else:
                         kwargs["tx_hash"] = search_string
-                        redirect_url = reverse("transaction_overview", kwargs=kwargs)
+                        redirect_url = reverse("transaction_overview",
+                                               kwargs=kwargs)
 
             elif is_valid_address(search_string):
                 # It's an address
@@ -93,17 +94,28 @@ def home(request):
                 # Override coin_symbol if we can infer it from the blockchain
                 # There is now generic constants in the python library (constants.py)
                 # Not migrating because this is custom (those constants have overlap/ambiguity)
-                if first_char in ("1", "b",):
+                if first_char in (
+                        "1",
+                        "b",
+                ):
                     # Do not force addresses starting with 3 to be BTC because that's also used by LTC
                     kwargs["coin_symbol"] = "btc"
-                elif first_char in ("m", "n", "2", "t",):
+                elif first_char in (
+                        "m",
+                        "n",
+                        "2",
+                        "t",
+                ):
                     # Note that addresses starting in 2 can be LTC testnet, but since we don't support that it's okay to include
                     kwargs["coin_symbol"] = "btc-testnet"
                 elif first_char in ("9", "A"):
                     kwargs["coin_symbol"] = "doge"
-                elif first_char in ("X",):
+                elif first_char in ("X", ):
                     kwargs["coin_symbol"] = "dash"
-                elif first_char in ("L", "l",):
+                elif first_char in (
+                        "L",
+                        "l",
+                ):
                     # Do not force addresses starting with 3 to be LTC because that's also used by BTC
                     kwargs["coin_symbol"] = "ltc"
                 elif first_char in ("B", "C"):
@@ -125,16 +137,14 @@ def home(request):
                 return HttpResponseRedirect(redirect_url)
 
         else:
-            currency = COIN_SYMBOL_MAPPINGS[request.POST["coin_symbol"]][
-                "display_shortname"
-            ]
+            currency = COIN_SYMBOL_MAPPINGS[
+                request.POST["coin_symbol"]]["display_shortname"]
             msg = _(
                 "Sorry, '%(search_string)s' is not a valid %(currency)s address, wallet name, transaction or block"
                 % {
                     "currency": currency,
                     "search_string": request.POST["search_string"],
-                }
-            )
+                })
             messages.error(request, msg)
 
     return {
@@ -154,29 +164,30 @@ def coin_overview(request, coin_symbol):
     }
     form = SearchForm(initial=initial)
 
-    latest_bh = get_latest_block_height(
-        coin_symbol=coin_symbol, api_key=BLOCKCYPHER_API_KEY
-    )
+    latest_bh = get_latest_block_height(coin_symbol=coin_symbol,
+                                        api_key=BLOCKCYPHER_API_KEY)
 
     recent_blocks = get_blocks_overview(
-        block_representation_list=list(reversed(range(latest_bh - 4, latest_bh + 1))),
+        block_representation_list=list(
+            reversed(range(latest_bh - 4, latest_bh + 1))),
         coin_symbol=coin_symbol,
         api_key=BLOCKCYPHER_API_KEY,
     )
 
-    recent_blocks = sorted(recent_blocks, key=lambda k: k["height"], reverse=True)
-    fees = get_blockchain_fee_estimates(
-        coin_symbol=coin_symbol, api_key=BLOCKCYPHER_API_KEY
-    )
+    recent_blocks = sorted(recent_blocks,
+                           key=lambda k: k["height"],
+                           reverse=True)
+    fees = get_blockchain_fee_estimates(coin_symbol=coin_symbol,
+                                        api_key=BLOCKCYPHER_API_KEY)
 
     fees["high_fee_per_kb__smalltx"] = fees["high_fee_per_kb"] / 4
     fees["medium_fee_per_kb__smalltx"] = fees["medium_fee_per_kb"] / 4
     fees["low_fee_per_kb__smalltx"] = fees["low_fee_per_kb"] / 4
     # import pprint; pprint.pprint(recent_blocks, width=1)
 
-    recent_txs = get_broadcast_transactions(
-        coin_symbol=coin_symbol, api_key=BLOCKCYPHER_API_KEY, limit=10
-    )
+    recent_txs = get_broadcast_transactions(coin_symbol=coin_symbol,
+                                            api_key=BLOCKCYPHER_API_KEY,
+                                            limit=10)
 
     recent_txs_filtered = []
     tx_hashes_seen = set([])
@@ -188,9 +199,9 @@ def coin_overview(request, coin_symbol):
             recent_txs_filtered.append(recent_tx)
 
     # sort recent txs by order (they're not always returning in order)
-    recent_txs_filtered = sorted(
-        recent_txs_filtered, key=itemgetter("received"), reverse=True
-    )
+    recent_txs_filtered = sorted(recent_txs_filtered,
+                                 key=itemgetter("received"),
+                                 reverse=True)
 
     fee_api_url = "https://api.blockcypher.com/v1/%s/%s" % (
         COIN_SYMBOL_MAPPINGS[coin_symbol]["blockcypher_code"],

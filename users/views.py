@@ -54,14 +54,17 @@ def user_login(request):
                             return HttpResponseRedirect(post_login_url)
                     else:
                         pw_reset_uri = reverse_lazy("forgot_password")
-                        pw_reset_uri = "%s?e=%s" % (pw_reset_uri, escape(email))
+                        pw_reset_uri = "%s?e=%s" % (pw_reset_uri,
+                                                    escape(email))
                         msg = _(
                             'Sorry, that password is incorrect. Would you like to <a href="%(pw_reset_uri)s">reset your password</a>?'
-                            % {"pw_reset_uri": pw_reset_uri,}
-                        )
+                            % {
+                                "pw_reset_uri": pw_reset_uri,
+                            })
                         messages.warning(request, msg, extra_tags="safe")
                 else:
-                    msg = _("Sorry, that account doesn't have a password set yet.")
+                    msg = _(
+                        "Sorry, that account doesn't have a password set yet.")
                     messages.info(request, msg, extra_tags="safe")
                     redir_uri = reverse_lazy("forgot_password")
                     redir_uri = "%s?e=%s" % (redir_uri, escape(email))
@@ -72,8 +75,9 @@ def user_login(request):
                 signup_uri = "%s?e=%s" % (signup_base, escape(email))
                 msg = _(
                     'Account not found. Did you mean to <a href="%(signup_uri)s">sign up</a>?'
-                    % {"signup_uri": signup_uri,}
-                )
+                    % {
+                        "signup_uri": signup_uri,
+                    })
                 messages.warning(request, msg, extra_tags="safe")
     elif request.method == "GET":
         email = request.GET.get("e")
@@ -130,7 +134,10 @@ def signup(request):
         email = request.GET.get("e")
         full_name = request.GET.get("name")
         if email or full_name:
-            form = RegistrationForm(initial={"email": email, "full_name": full_name,})
+            form = RegistrationForm(initial={
+                "email": email,
+                "full_name": full_name,
+            })
 
     return {
         "form": form,
@@ -207,9 +214,8 @@ def reset_pw(request, verif_code):
         messages.warning(request, msg)
         return HttpResponseRedirect(reverse_lazy("forgot_password"))
 
-    if sent_email.verified_at and (
-        now() - sent_email.verified_at > timedelta(minutes=60)
-    ):
+    if sent_email.verified_at and (now() - sent_email.verified_at >
+                                   timedelta(minutes=60)):
         msg = _("Sorry, that was already used. Please try again.")
         messages.warning(request, msg)
         return HttpResponseRedirect(reverse_lazy("forgot_password"))
@@ -231,7 +237,8 @@ def reset_pw(request, verif_code):
                 messages.success(request, msg)
 
                 # login user
-                user_to_login = authenticate(email=auth_user.email, password=password)
+                user_to_login = authenticate(email=auth_user.email,
+                                             password=password)
                 login(request, user_to_login)
 
                 # Log the login
@@ -271,8 +278,7 @@ def forgot_password(request):
                 signup_url = "%s?e=%s" % (signup_url, escape(email))
                 msg = _(
                     'Sorry, no user found with that email. Would you like to <a href="%(signup_url)s">create an account</a>?'
-                    % {"signup_url": signup_url}
-                )
+                    % {"signup_url": signup_url})
                 messages.warning(request, msg, extra_tags="safe")
 
     elif request.method == "GET":
@@ -303,10 +309,8 @@ def confirm_subscription(request, verif_code):
 
     if sent_email.verified_at and auth_user.email_verified:
         # already verified
-        msg = _(
-            "<b>%(email_address)s</b> already verified"
-            % {"email_address": sent_email.to_email}
-        )
+        msg = _("<b>%(email_address)s</b> already verified" %
+                {"email_address": sent_email.to_email})
         messages.info(request, msg, extra_tags="safe")
         return HttpResponseRedirect(reverse_lazy("dashboard"))
 
@@ -325,8 +329,7 @@ def confirm_subscription(request, verif_code):
         }
         msg = _(
             "<b>%(email_address)s</b> verified, you will now receive email notifications for <b>%(b58_address)s</b>."
-            % msg_merge
-        )
+            % msg_merge)
         messages.info(request, msg, extra_tags="safe")
 
         # Ask them to create a new PW

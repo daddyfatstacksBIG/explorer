@@ -57,7 +57,8 @@ def block_overview(request, coin_symbol, block_representation):
     except AssertionError:
         msg = _("Invalid Block Representation")
         messages.warning(request, msg)
-        redir_url = reverse("coin_overview", kwargs={"coin_symbol": coin_symbol})
+        redir_url = reverse("coin_overview",
+                            kwargs={"coin_symbol": coin_symbol})
         return HttpResponseRedirect(redir_url)
 
     # import pprint; pprint.pprint(block_details, width=1)
@@ -76,13 +77,17 @@ def block_overview(request, coin_symbol, block_representation):
     )
 
     return {
-        "coin_symbol": coin_symbol,
-        "api_url": api_url,
-        "block_details": block_details,
-        "current_page": current_page,
-        "max_pages": get_max_pages(
-            num_items=block_details["n_tx"], items_per_page=TXNS_PER_PAGE
-        ),
+        "coin_symbol":
+        coin_symbol,
+        "api_url":
+        api_url,
+        "block_details":
+        block_details,
+        "current_page":
+        current_page,
+        "max_pages":
+        get_max_pages(num_items=block_details["n_tx"],
+                      items_per_page=TXNS_PER_PAGE),
     }
 
 
@@ -102,9 +107,12 @@ def block_ordered_tx(request, coin_symbol, block_num, tx_num):
         msg = _(
             'This is transaction <strong>%(tx_num)s</strong> in block <strong>%(block_num)s</strong> (<a href="%(permalink)s">permalink</a>).'
             % {
-                "tx_num": tx_num,
-                "block_num": block_num,
-                "permalink": reverse(
+                "tx_num":
+                tx_num,
+                "block_num":
+                block_num,
+                "permalink":
+                reverse(
                     "block_ordered_tx",
                     kwargs={
                         "coin_symbol": coin_symbol,
@@ -112,8 +120,7 @@ def block_ordered_tx(request, coin_symbol, block_num, tx_num):
                         "tx_num": tx_num,
                     },
                 ),
-            }
-        )
+            })
         messages.info(request, msg, extra_tags="safe")
 
         kwargs = {
@@ -121,15 +128,18 @@ def block_ordered_tx(request, coin_symbol, block_num, tx_num):
             "tx_hash": tx_hash,
         }
 
-        redir_uri = reverse("transaction_overview", kwargs=kwargs) + "#advanced-details"
+        redir_uri = reverse("transaction_overview",
+                            kwargs=kwargs) + "#advanced-details"
 
         return HttpResponseRedirect(redir_uri)
 
     else:
         msg = _(
             "Sorry, block <strong>%(block_num)s</strong> only has <strong>%(n_tx)s</strong> transactions"
-            % {"block_num": block_num, "n_tx": block_overview["n_tx"],}
-        )
+            % {
+                "block_num": block_num,
+                "n_tx": block_overview["n_tx"],
+            })
         messages.warning(request, msg, extra_tags="safe")
 
         kwargs = {
@@ -141,9 +151,8 @@ def block_ordered_tx(request, coin_symbol, block_num, tx_num):
 
 @assert_valid_coin_symbol
 def latest_block(request, coin_symbol):
-    latest_block_height = get_latest_block_height(
-        coin_symbol=coin_symbol, api_key=BLOCKCYPHER_API_KEY
-    )
+    latest_block_height = get_latest_block_height(coin_symbol=coin_symbol,
+                                                  api_key=BLOCKCYPHER_API_KEY)
     kwargs = {
         "coin_symbol": coin_symbol,
         "block_representation": latest_block_height,
@@ -152,4 +161,7 @@ def latest_block(request, coin_symbol):
 
 
 def latest_block_forwarding(request):
-    return HttpResponseRedirect(reverse("latest_block", kwargs={"coin_symbol": "btc",}))
+    return HttpResponseRedirect(
+        reverse("latest_block", kwargs={
+            "coin_symbol": "btc",
+        }))

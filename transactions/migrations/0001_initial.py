@@ -24,20 +24,21 @@ class Migration(migrations.Migration):
                         primary_key=True,
                     ),
                 ),
-                ("created_at", models.DateTimeField(db_index=True, auto_now_add=True)),
+                ("created_at",
+                 models.DateTimeField(db_index=True, auto_now_add=True)),
                 ("tx_hash", models.CharField(db_index=True, max_length=128)),
                 ("conf_num", models.IntegerField(db_index=True)),
-                ("double_spend", models.BooleanField(db_index=True, default=False)),
+                ("double_spend",
+                 models.BooleanField(db_index=True, default=False)),
                 ("satoshis_sent", models.BigIntegerField(db_index=True)),
                 ("fee_in_satoshis", models.BigIntegerField(db_index=True)),
                 (
                     "address_subscription",
-                    models.ForeignKey(
-                        to="addresses.AddressSubscription", on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(to="addresses.AddressSubscription",
+                                      on_delete=models.CASCADE),
                 ),
             ],
             options={},
-            bases=(models.Model,),
+            bases=(models.Model, ),
         ),
     ]

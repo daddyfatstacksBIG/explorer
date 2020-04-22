@@ -53,14 +53,16 @@ def transaction_overview(request, coin_symbol, tx_hash):
     except AssertionError:
         msg = _("Invalid Transaction Hash")
         messages.warning(request, msg)
-        redir_url = reverse("coin_overview", kwargs={"coin_symbol": coin_symbol})
+        redir_url = reverse("coin_overview",
+                            kwargs={"coin_symbol": coin_symbol})
         return HttpResponseRedirect(redir_url)
 
     # import pprint; pprint.pprint(transaction_details, width=1)
 
     if "error" in transaction_details:
         # Corner case, such as a validly formed tx hash with no matching transaction
-        msg = _("No transaction found with the hash %(tx_hash)s" % {"tx_hash": tx_hash})
+        msg = _("No transaction found with the hash %(tx_hash)s" %
+                {"tx_hash": tx_hash})
         messages.warning(request, msg)
         return HttpResponseRedirect(reverse("home"))
 
@@ -310,12 +312,12 @@ def embed_txdata(request, coin_symbol):
                 }
                 msg = _(
                     "Data succesfully embedded into TX <strong>%(tx_hash)s</strong>"
-                    % {"tx_hash": tx_hash,}
-                )
+                    % {
+                        "tx_hash": tx_hash,
+                    })
                 messages.success(request, msg, extra_tags="safe")
                 return HttpResponseRedirect(
-                    reverse("transaction_overview", kwargs=kwargs)
-                )
+                    reverse("transaction_overview", kwargs=kwargs))
 
     elif request.method == "GET":
         # Preseed tx hex if passed through GET string
@@ -341,9 +343,9 @@ def embed_txdata_forwarding(request):
 
 
 def latest_unconfirmed_tx(request, coin_symbol):
-    recent_tx_hash = get_broadcast_transactions(
-        coin_symbol=coin_symbol, api_key=BLOCKCYPHER_API_KEY, limit=1
-    )[0]["hash"]
+    recent_tx_hash = get_broadcast_transactions(coin_symbol=coin_symbol,
+                                                api_key=BLOCKCYPHER_API_KEY,
+                                                limit=1)[0]["hash"]
     kwargs = {
         "coin_symbol": coin_symbol,
         "tx_hash": recent_tx_hash,
@@ -353,5 +355,4 @@ def latest_unconfirmed_tx(request, coin_symbol):
 
 def latest_unconfirmed_tx_forwarding(request):
     return HttpResponseRedirect(
-        reverse("latest_unconfirmed_tx", kwargs={"coin_symbol": "btc"})
-    )
+        reverse("latest_unconfirmed_tx", kwargs={"coin_symbol": "btc"}))

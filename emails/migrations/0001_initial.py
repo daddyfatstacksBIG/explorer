@@ -27,39 +27,47 @@ class Migration(migrations.Migration):
                         primary_key=True,
                     ),
                 ),
-                ("sent_at", models.DateTimeField(db_index=True, auto_now_add=True)),
-                ("from_email", models.EmailField(db_index=True, max_length=256)),
+                ("sent_at",
+                 models.DateTimeField(db_index=True, auto_now_add=True)),
+                ("from_email", models.EmailField(db_index=True,
+                                                 max_length=256)),
                 (
                     "from_name",
-                    models.CharField(
-                        blank=True, max_length=256, db_index=True, null=True
-                    ),
+                    models.CharField(blank=True,
+                                     max_length=256,
+                                     db_index=True,
+                                     null=True),
                 ),
                 ("to_email", models.EmailField(db_index=True, max_length=256)),
                 (
                     "to_name",
-                    models.CharField(
-                        blank=True, max_length=256, db_index=True, null=True
-                    ),
+                    models.CharField(blank=True,
+                                     max_length=256,
+                                     db_index=True,
+                                     null=True),
                 ),
                 (
                     "cc_email",
-                    models.EmailField(
-                        blank=True, max_length=256, db_index=True, null=True
-                    ),
+                    models.EmailField(blank=True,
+                                      max_length=256,
+                                      db_index=True,
+                                      null=True),
                 ),
                 (
                     "cc_name",
-                    models.CharField(
-                        blank=True, max_length=256, db_index=True, null=True
-                    ),
+                    models.CharField(blank=True,
+                                     max_length=256,
+                                     db_index=True,
+                                     null=True),
                 ),
-                ("body_template", models.CharField(db_index=True, max_length=256)),
+                ("body_template",
+                 models.CharField(db_index=True, max_length=256)),
                 ("body_context", jsonfield.fields.JSONField()),
                 ("subject", models.TextField()),
                 (
                     "unsub_code",
-                    models.CharField(unique=True, db_index=True, max_length=64),
+                    models.CharField(unique=True, db_index=True,
+                                     max_length=64),
                 ),
                 (
                     "unsubscribed_at",
@@ -67,17 +75,22 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "unsub_ip",
-                    models.IPAddressField(blank=True, db_index=True, null=True),
+                    models.IPAddressField(blank=True, db_index=True,
+                                          null=True),
                 ),
                 (
                     "unsub_ua",
-                    models.CharField(blank=True, db_index=True, max_length=1024),
+                    models.CharField(blank=True,
+                                     db_index=True,
+                                     max_length=1024),
                 ),
                 (
                     "verif_code",
-                    models.CharField(
-                        blank=True, max_length=64, unique=True, db_index=True, null=True
-                    ),
+                    models.CharField(blank=True,
+                                     max_length=64,
+                                     unique=True,
+                                     db_index=True,
+                                     null=True),
                 ),
                 (
                     "verified_at",
@@ -85,11 +98,14 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "verif_ip",
-                    models.IPAddressField(blank=True, db_index=True, null=True),
+                    models.IPAddressField(blank=True, db_index=True,
+                                          null=True),
                 ),
                 (
                     "verif_ua",
-                    models.CharField(blank=True, db_index=True, max_length=1024),
+                    models.CharField(blank=True,
+                                     db_index=True,
+                                     max_length=1024),
                 ),
                 (
                     "address_subscription",
@@ -111,6 +127,6 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={},
-            bases=(models.Model,),
+            bases=(models.Model, ),
         ),
     ]

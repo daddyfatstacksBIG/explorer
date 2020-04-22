@@ -25,7 +25,8 @@ class Migration(migrations.Migration):
                         auto_created=True,
                     ),
                 ),
-                ("created_at", models.DateTimeField(db_index=True, auto_now_add=True)),
+                ("created_at",
+                 models.DateTimeField(db_index=True, auto_now_add=True)),
                 (
                     "coin_symbol",
                     models.CharField(
@@ -41,7 +42,8 @@ class Migration(migrations.Migration):
                         max_length=16,
                     ),
                 ),
-                ("b58_address", models.CharField(db_index=True, max_length=64)),
+                ("b58_address", models.CharField(db_index=True,
+                                                 max_length=64)),
                 (
                     "notify_on_broadcast",
                     models.BooleanField(db_index=True, default=True),
@@ -54,7 +56,8 @@ class Migration(migrations.Migration):
                     "notify_on_sixth_confirm",
                     models.BooleanField(db_index=True, default=False),
                 ),
-                ("notify_on_deposit", models.BooleanField(db_index=True, default=True)),
+                ("notify_on_deposit",
+                 models.BooleanField(db_index=True, default=True)),
                 (
                     "notify_on_withdrawal",
                     models.BooleanField(db_index=True, default=True),
@@ -76,12 +79,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "auth_user",
-                    models.ForeignKey(
-                        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-                    ),
+                    models.ForeignKey(to=settings.AUTH_USER_MODEL,
+                                      on_delete=models.CASCADE),
                 ),
             ],
             options={},
-            bases=(models.Model,),
+            bases=(models.Model, ),
         ),
     ]

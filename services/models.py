@@ -20,13 +20,18 @@ class APICall(models.Model):
 
     # Main fields
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    api_name = models.CharField(
-        choices=API_NAME_CHOICES, max_length=3, null=False, blank=False, db_index=True
-    )
-    url_hit = models.URLField(max_length=1024, blank=False, null=False, db_index=True)
-    response_code = models.PositiveSmallIntegerField(
-        blank=False, null=False, db_index=True
-    )
+    api_name = models.CharField(choices=API_NAME_CHOICES,
+                                max_length=3,
+                                null=False,
+                                blank=False,
+                                db_index=True)
+    url_hit = models.URLField(max_length=1024,
+                              blank=False,
+                              null=False,
+                              db_index=True)
+    response_code = models.PositiveSmallIntegerField(blank=False,
+                                                     null=False,
+                                                     db_index=True)
     post_params = JSONField(blank=True, null=True)
     headers = models.CharField(max_length=2048, null=True, blank=True)
     api_results = models.CharField(max_length=100000, blank=True, null=True)
@@ -43,30 +48,38 @@ class WebHook(models.Model):
     # api_name choices
     BLOCKCYPHER_ADDRESS_NOTIFICATION = "BAN"
 
-    API_NAME_CHOICES = (
-        (BLOCKCYPHER_ADDRESS_NOTIFICATION, "blockcypher address notification"),
-    )
+    API_NAME_CHOICES = ((BLOCKCYPHER_ADDRESS_NOTIFICATION,
+                         "blockcypher address notification"), )
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     # IP and UA of machine hitting coinsafe
-    ip_address = models.GenericIPAddressField(null=False, blank=False, db_index=True)
+    ip_address = models.GenericIPAddressField(null=False,
+                                              blank=False,
+                                              db_index=True)
     user_agent = models.CharField(max_length=1024, blank=True, db_index=True)
-    api_name = models.CharField(
-        choices=API_NAME_CHOICES, max_length=3, null=False, blank=False, db_index=True
-    )
-    hostname = models.CharField(max_length=512, blank=False, null=False, db_index=True)
-    request_path = models.CharField(
-        max_length=2048, blank=False, null=False, db_index=True
-    )
+    api_name = models.CharField(choices=API_NAME_CHOICES,
+                                max_length=3,
+                                null=False,
+                                blank=False,
+                                db_index=True)
+    hostname = models.CharField(max_length=512,
+                                blank=False,
+                                null=False,
+                                db_index=True)
+    request_path = models.CharField(max_length=2048,
+                                    blank=False,
+                                    null=False,
+                                    db_index=True)
     uses_https = models.BooleanField(db_index=True, default=False)
     succeeded = models.BooleanField(db_index=True, default=False)
     data_from_get = JSONField(blank=True, null=True)
     data_from_post = JSONField(blank=True, null=True)
 
     # optional FKs
-    address_subscription = models.ForeignKey(
-        "addresses.AddressSubscription", null=True, blank=True, on_delete=models.CASCADE
-    )
+    address_subscription = models.ForeignKey("addresses.AddressSubscription",
+                                             null=True,
+                                             blank=True,
+                                             on_delete=models.CASCADE)
 
     def __str__(self):
         return "%s from %s" % (self.id, self.api_name)
@@ -95,7 +108,8 @@ class WebHook(models.Model):
         if self.data_from_get:
             r = requests.get(url_to_hit, params=self.data_from_get)
         elif self.data_from_post:
-            r = requests.post(url_to_hit, params=json.dumps(self.data_from_post))
+            r = requests.post(url_to_hit,
+                              params=json.dumps(self.data_from_post))
 
         if is_good_status_code(r.status_code):
             return True

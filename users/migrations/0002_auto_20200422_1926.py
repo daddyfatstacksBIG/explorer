@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="authuser",
             name="last_login",
-            field=models.DateTimeField(
-                blank=True, null=True, verbose_name="last login"
-            ),
+            field=models.DateTimeField(blank=True,
+                                       null=True,
+                                       verbose_name="last login"),
         ),
     ]

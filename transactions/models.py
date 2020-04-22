@@ -10,7 +10,10 @@ class OnChainTransaction(models.Model):
     """
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    tx_hash = models.CharField(blank=False, null=False, max_length=128, db_index=True)
+    tx_hash = models.CharField(blank=False,
+                               null=False,
+                               max_length=128,
+                               db_index=True)
     address_subscription = models.ForeignKey(
         "addresses.AddressSubscription",
         blank=False,
@@ -19,8 +22,12 @@ class OnChainTransaction(models.Model):
     )
     num_confs = models.IntegerField(blank=False, null=False, db_index=True)
     double_spend = models.BooleanField(db_index=True, default=False)
-    satoshis_sent = models.BigIntegerField(blank=False, null=False, db_index=True)
-    fee_in_satoshis = models.BigIntegerField(blank=False, null=False, db_index=True)
+    satoshis_sent = models.BigIntegerField(blank=False,
+                                           null=False,
+                                           db_index=True)
+    fee_in_satoshis = models.BigIntegerField(blank=False,
+                                             null=False,
+                                             db_index=True)
     is_deposit = models.BooleanField(db_index=True, default=False)
     is_withdrawal = models.BooleanField(db_index=True, default=False)
 
@@ -52,19 +59,26 @@ class OnChainTransaction(models.Model):
             round_digits=4,
         )
         context_dict = {
-            "b58_address": b58_address,
-            "coin_symbol": self.address_subscription.coin_symbol,
-            "sent_in_btc": sent_in_btc,
-            "fee_in_btc": fee_in_btc,
-            "currency_display_name": self.address_subscription.get_currency_display_name(),
-            "currency_abbrev": self.address_subscription.get_currency_abbrev(),
-            "tx_hash": self.tx_hash,
-            "num_confs": self.num_confs,
+            "b58_address":
+            b58_address,
+            "coin_symbol":
+            self.address_subscription.coin_symbol,
+            "sent_in_btc":
+            sent_in_btc,
+            "fee_in_btc":
+            fee_in_btc,
+            "currency_display_name":
+            self.address_subscription.get_currency_display_name(),
+            "currency_abbrev":
+            self.address_subscription.get_currency_abbrev(),
+            "tx_hash":
+            self.tx_hash,
+            "num_confs":
+            self.num_confs,
         }
         if self.address_subscription.address_forwarding_obj:
             context_dict[
-                "destination_address"
-            ] = self.address_subscription.address_forwarding_obj.destination_address
+                "destination_address"] = self.address_subscription.address_forwarding_obj.destination_address
             context_dict["satoshis_transacted"] = self.satoshis_sent
         fkey_objs = {
             "transaction_event": self,
@@ -81,11 +95,16 @@ class OnChainTransaction(models.Model):
     def send_confirmed_tx_email(self):
         b58_address = self.address_subscription.b58_address
         context_dict = {
-            "b58_address": b58_address,
-            "coin_symbol": self.address_subscription.coin_symbol,
-            "tx_hash": self.tx_hash,
-            "num_confs": self.num_confs,
-            "currency_display_name": self.address_subscription.get_currency_display_name(),
+            "b58_address":
+            b58_address,
+            "coin_symbol":
+            self.address_subscription.coin_symbol,
+            "tx_hash":
+            self.tx_hash,
+            "num_confs":
+            self.num_confs,
+            "currency_display_name":
+            self.address_subscription.get_currency_display_name(),
         }
         fkey_objs = {
             "transaction_event": self,

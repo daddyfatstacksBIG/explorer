@@ -13,9 +13,11 @@ register = template.Library()
 
 
 @register.simple_tag(name="satoshis_to_user_units_trimmed")
-def satoshis_to_user_units_trimmed(
-    input_satoshis, user_unit="btc", coin_symbol="btc", print_cs=True, round_digits=0
-):
+def satoshis_to_user_units_trimmed(input_satoshis,
+                                   user_unit="btc",
+                                   coin_symbol="btc",
+                                   print_cs=True,
+                                   round_digits=0):
     # fix for coinbase input
     if not isinstance(input_satoshis, int):
         return ""
@@ -112,13 +114,11 @@ def build_url(base_url, **query_params):
 
     # print('new_qs', new_qs)
 
-    return urlunparse(
-        [
-            url_parsed.scheme,
-            url_parsed.netloc,
-            url_parsed.path,
-            url_parsed.params,
-            urlencode(new_qs),
-            url_parsed.fragment,
-        ]
-    )
+    return urlunparse([
+        url_parsed.scheme,
+        url_parsed.netloc,
+        url_parsed.path,
+        url_parsed.params,
+        urlencode(new_qs),
+        url_parsed.fragment,
+    ])

@@ -29,9 +29,11 @@ class AuthUserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(
-        self, email, password, creation_ip=None, creation_user_agent=None
-    ):
+    def create_superuser(self,
+                         email,
+                         password,
+                         creation_ip=None,
+                         creation_user_agent=None):
         """
         Creates and saves a superuser with the given email and password.
         """
@@ -64,8 +66,12 @@ class AuthUser(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    creation_ip = models.GenericIPAddressField(null=False, blank=False, db_index=True)
-    creation_user_agent = models.CharField(max_length=1024, blank=True, db_index=True)
+    creation_ip = models.GenericIPAddressField(null=False,
+                                               blank=False,
+                                               db_index=True)
+    creation_user_agent = models.CharField(max_length=1024,
+                                           blank=True,
+                                           db_index=True)
 
     email_verified = models.BooleanField(default=False, db_index=True)
 
@@ -100,11 +106,13 @@ class AuthUser(AbstractBaseUser):
 
     def get_address_subscriptions(self):
         return self.addresssubscription_set.filter(
-            unsubscribed_at=None, disabled_at=None,
+            unsubscribed_at=None,
+            disabled_at=None,
         ).order_by("-id")
 
     def get_address_forwardings(self):
-        return self.addressforwarding_set.filter(archived_at=None).order_by("-id")
+        return self.addressforwarding_set.filter(
+            archived_at=None).order_by("-id")
 
     def send_pwreset_email(self):
         """
@@ -122,10 +130,13 @@ class AuthUser(AbstractBaseUser):
 
 class LoggedLogin(models.Model):
     login_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    auth_user = models.ForeignKey(
-        AuthUser, blank=False, null=False, on_delete=models.CASCADE
-    )
-    ip_address = models.GenericIPAddressField(null=False, blank=False, db_index=True)
+    auth_user = models.ForeignKey(AuthUser,
+                                  blank=False,
+                                  null=False,
+                                  on_delete=models.CASCADE)
+    ip_address = models.GenericIPAddressField(null=False,
+                                              blank=False,
+                                              db_index=True)
     user_agent = models.CharField(max_length=1024, blank=True, db_index=True)
 
     def __str__(self):

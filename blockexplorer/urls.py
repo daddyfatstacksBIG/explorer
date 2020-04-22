@@ -31,12 +31,18 @@ urlpatterns = [
         users_views.confirm_pw_reset,
         name="confirm_pw_reset",
     ),
-    url(r"^set-password/?$", users_views.password_upsell, name="password_upsell"),
-    url(r"^change-password/?$", users_views.change_password, name="change_password"),
-    url(r"^forgot-password/?$", users_views.forgot_password, name="forgot_password"),
-    url(
-        r"^reset-pw/(?P<verif_code>[-\w@.+]+)?$", users_views.reset_pw, name="reset_pw"
-    ),
+    url(r"^set-password/?$",
+        users_views.password_upsell,
+        name="password_upsell"),
+    url(r"^change-password/?$",
+        users_views.change_password,
+        name="change_password"),
+    url(r"^forgot-password/?$",
+        users_views.forgot_password,
+        name="forgot_password"),
+    url(r"^reset-pw/(?P<verif_code>[-\w@.+]+)?$",
+        users_views.reset_pw,
+        name="reset_pw"),
     url(
         r"^unsubscribe/(?P<unsub_code>[-\w]+)/$",
         addresses_views.unsubscribe_address,
@@ -99,9 +105,9 @@ urlpatterns = [
         wallets_views.wallet_overview,
         name="wallet_overview_default",
     ),
-    url(
-        r"^(?P<coin_symbol>[-\w]+)/pushtx/$", transactions_views.push_tx, name="push_tx"
-    ),
+    url(r"^(?P<coin_symbol>[-\w]+)/pushtx/$",
+        transactions_views.push_tx,
+        name="push_tx"),
     url(
         r"^(?P<coin_symbol>[-\w]+)/decodetx/$",
         transactions_views.decode_tx,
@@ -161,16 +167,20 @@ urlpatterns = [
         name="render_received_widget",
     ),
     # Forwarding Pages (URL hacks)
-    url(r"^widgets/$", addresses_views.widget_forwarding, name="widget_forwarding"),
-    url(
-        r"^forwarding/$", addresses_views.forward_forwarding, name="forward_forwarding"
-    ),  # awesome name
+    url(r"^widgets/$",
+        addresses_views.widget_forwarding,
+        name="widget_forwarding"),
+    url(r"^forwarding/$",
+        addresses_views.forward_forwarding,
+        name="forward_forwarding"),  # awesome name
     url(
         r"^subscribe/$",
         addresses_views.subscribe_forwarding,
         name="subscribe_forwarding",
     ),
-    url(r"^pushtx/$", transactions_views.pushtx_forwarding, name="pushtx_forwarding"),
+    url(r"^pushtx/$",
+        transactions_views.pushtx_forwarding,
+        name="pushtx_forwarding"),
     url(
         r"^decodetx/$",
         transactions_views.decodetx_forwarding,
@@ -181,7 +191,9 @@ urlpatterns = [
         transactions_views.embed_txdata_forwarding,
         name="embed_txdata_forwarding",
     ),
-    url(r"^metadata/$", metadata_views.metadata_forwarding, name="metadata_forwarding"),
+    url(r"^metadata/$",
+        metadata_views.metadata_forwarding,
+        name="metadata_forwarding"),
     url(
         r"^(?P<coin_symbol>[-\w]+)/metadata/$",
         metadata_views.add_metadata,
