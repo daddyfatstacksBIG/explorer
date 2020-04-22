@@ -1,14 +1,12 @@
-from django.conf.urls import url
-from django.contrib import admin
-
 from addresses import views as addresses_views
 from blocks import views as blocks_views
+from django.conf.urls import url
+from django.contrib import admin
 from homepage import views as homepage_views
 from metadata import views as metadata_views
 from transactions import views as transactions_views
 from users import views as users_views
 from wallets import views as wallets_views
-
 
 urlpatterns = [
     # Logging Test

@@ -1,28 +1,20 @@
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.core.serializers.json import DjangoJSONEncoder
-from django.urls import reverse
-from django.contrib import messages
-from django.contrib.humanize.templatetags.humanize import intcomma
-from django.utils.translation import ugettext_lazy as _
-from annoying.decorators import render_to
-
-from blockexplorer.settings import BLOCKCYPHER_API_KEY
-from blockexplorer.decorators import assert_valid_coin_symbol
-
-from metadata.forms import BaseMetadataForm
-
-from blockcypher.api import (
-    get_metadata,
-    put_metadata,
-    get_latest_block_hash,
-    get_block_overview,
-)
-from blockcypher.utils import is_valid_address_for_coinsymbol, is_valid_hash
-from blockcypher.constants import COIN_SYMBOL_MAPPINGS
-
+import json
 from random import choice
 
-import json
+from annoying.decorators import render_to
+from blockcypher.api import (get_block_overview, get_latest_block_hash,
+                             get_metadata, put_metadata)
+from blockcypher.constants import COIN_SYMBOL_MAPPINGS
+from blockcypher.utils import is_valid_address_for_coinsymbol, is_valid_hash
+from blockexplorer.decorators import assert_valid_coin_symbol
+from blockexplorer.settings import BLOCKCYPHER_API_KEY
+from django.contrib import messages
+from django.contrib.humanize.templatetags.humanize import intcomma
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
+from metadata.forms import BaseMetadataForm
 
 
 @assert_valid_coin_symbol

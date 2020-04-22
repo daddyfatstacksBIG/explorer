@@ -1,33 +1,20 @@
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from operator import itemgetter
 
 from annoying.decorators import render_to
+from blockcypher.api import (get_block_overview, get_blockchain_fee_estimates,
+                             get_blocks_overview, get_broadcast_transactions,
+                             get_latest_block_height, get_transaction_details)
+from blockcypher.constants import COIN_SYMBOL_MAPPINGS, SCRYPT_COINS, SHA_COINS
+from blockcypher.utils import (is_valid_address, is_valid_block_num,
+                               is_valid_hash, is_valid_sha_block_hash)
 from blockexplorer.decorators import assert_valid_coin_symbol
-
-from blockexplorer.settings import BLOCKCYPHER_PUBLIC_KEY, BLOCKCYPHER_API_KEY
-from blockexplorer.walletname import lookup_wallet_name, is_valid_wallet_name
-
+from blockexplorer.settings import BLOCKCYPHER_API_KEY, BLOCKCYPHER_PUBLIC_KEY
+from blockexplorer.walletname import is_valid_wallet_name, lookup_wallet_name
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from homepage.forms import SearchForm, UnitChoiceForm
-
-from blockcypher.api import (
-    get_transaction_details,
-    get_block_overview,
-    get_blocks_overview,
-    get_latest_block_height,
-    get_broadcast_transactions,
-    get_blockchain_fee_estimates,
-)
-from blockcypher.utils import (
-    is_valid_hash,
-    is_valid_block_num,
-    is_valid_sha_block_hash,
-    is_valid_address,
-)
-from blockcypher.constants import SHA_COINS, SCRYPT_COINS, COIN_SYMBOL_MAPPINGS
-
-from operator import itemgetter
 
 
 @render_to("home.html")

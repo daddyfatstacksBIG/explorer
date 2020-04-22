@@ -1,10 +1,7 @@
 from django.db import models
-
 from django.utils.timezone import now
-
 from jsonfield import JSONField
-
-from utils import get_user_agent, get_client_ip
+from utils import get_client_ip, get_user_agent
 
 
 class SentEmail(models.Model):

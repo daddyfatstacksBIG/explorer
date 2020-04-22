@@ -1,8 +1,6 @@
+from blockcypher.constants import COIN_CHOICES, COIN_SYMBOL_MAPPINGS
 from django.db import models
 from django.utils.timezone import now
-
-from blockcypher.constants import COIN_CHOICES, COIN_SYMBOL_MAPPINGS
-
 from emails.trigger import send_and_log
 
 

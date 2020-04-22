@@ -1,11 +1,9 @@
-from django import template
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
-from urllib.parse import urlencode, urlparse, urlunparse, parse_qs
-
-from blockcypher.utils import format_crypto_units, estimate_satoshis_transacted
 from blockcypher.api import _get_websocket_url
 from blockcypher.constants import COIN_SYMBOL_MAPPINGS
-
+from blockcypher.utils import estimate_satoshis_transacted, format_crypto_units
+from django import template
 
 register = template.Library()
 

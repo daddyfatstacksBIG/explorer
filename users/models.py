@@ -1,11 +1,8 @@
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db import models
 from django.urls import reverse_lazy
-
 from emails.trigger import send_and_log
-
 from utils import get_client_ip, get_user_agent
-
 
 # For more info, see the django docs here:
 # https://docs.djangoproject.com/en/1.7/topics/auth/customizing/#a-full-example

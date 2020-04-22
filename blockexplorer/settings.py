@@ -8,11 +8,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-import re
-import dj_database_url
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import re
+
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 

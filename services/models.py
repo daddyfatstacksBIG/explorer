@@ -1,13 +1,11 @@
-from django.db import models
-
-from blockexplorer.raven import client
-
-from jsonfield import JSONField
-
-from utils import get_client_ip, uri_to_url, is_good_status_code, get_user_agent
-
 import json
+
 import requests
+from blockexplorer.raven import client
+from django.db import models
+from jsonfield import JSONField
+from utils import (get_client_ip, get_user_agent, is_good_status_code,
+                   uri_to_url)
 
 
 class APICall(models.Model):

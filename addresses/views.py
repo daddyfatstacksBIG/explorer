@@ -1,58 +1,39 @@
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
+import json
+from datetime import timedelta
+from urllib.parse import urlencode
+
+from addresses.forms import (AddressSearchForm, KnownUserAddressForwardingForm,
+                             KnownUserAddressSubscriptionForm,
+                             NewUserAddressForwardingForm,
+                             NewUserAddressSubscriptionForm)
+from addresses.models import AddressForwarding, AddressSubscription
+from annoying.decorators import render_to
+from annoying.functions import get_object_or_None
+from blockcypher.api import (get_address_full, get_address_overview,
+                             get_forwarding_address_details,
+                             subscribe_to_address_webhook,
+                             unsubscribe_from_webhook)
+from blockcypher.constants import COIN_SYMBOL_MAPPINGS
+from blockexplorer.decorators import assert_valid_coin_symbol
+from blockexplorer.raven import client
+from blockexplorer.settings import (BASE_URL, BLOCKCYPHER_API_KEY,
+                                    BLOCKCYPHER_PUBLIC_KEY, WEBHOOK_SECRET_KEY)
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import now
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.clickjacking import xframe_options_exempt
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-
-from annoying.decorators import render_to
-from annoying.functions import get_object_or_None
-
-from blockexplorer.decorators import assert_valid_coin_symbol
-
-from blockexplorer.raven import client
-
-from blockexplorer.settings import (
-    BLOCKCYPHER_PUBLIC_KEY,
-    BLOCKCYPHER_API_KEY,
-    WEBHOOK_SECRET_KEY,
-    BASE_URL,
-)
-
-from blockcypher.api import (
-    get_address_full,
-    get_address_overview,
-    subscribe_to_address_webhook,
-    get_forwarding_address_details,
-    unsubscribe_from_webhook,
-)
-from blockcypher.constants import COIN_SYMBOL_MAPPINGS
-
-from users.models import AuthUser, LoggedLogin
-from addresses.models import AddressSubscription, AddressForwarding
-from transactions.models import OnChainTransaction
-from services.models import WebHook
+from django.urls import reverse
+from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.csrf import csrf_exempt
 from emails.models import SentEmail
-
-from addresses.forms import (
-    KnownUserAddressSubscriptionForm,
-    NewUserAddressSubscriptionForm,
-    AddressSearchForm,
-    KnownUserAddressForwardingForm,
-    NewUserAddressForwardingForm,
-)
-
-from utils import get_user_agent, get_client_ip, uri_to_url, simple_pw_generator
-
-import json
-
-from urllib.parse import urlencode
-
-from datetime import timedelta
+from services.models import WebHook
+from transactions.models import OnChainTransaction
+from users.models import AuthUser, LoggedLogin
+from utils import (get_client_ip, get_user_agent, simple_pw_generator,
+                   uri_to_url)
 
 SMALL_PAYMENTS_MSG = """
 Please note that for very small payments of 100 bits or less,

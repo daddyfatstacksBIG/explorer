@@ -1,29 +1,20 @@
-from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import now
-from django.utils.html import escape
-from django.shortcuts import get_object_or_404
-
-from annoying.functions import get_object_or_None
-from annoying.decorators import render_to
-
-from users.models import AuthUser, LoggedLogin
-from emails.models import SentEmail
-
-from users.forms import (
-    LoginForm,
-    RegistrationForm,
-    SetPWForm,
-    ChangePWForm,
-    PWResetForm,
-)
-
 from datetime import timedelta
 
+from annoying.decorators import render_to
+from annoying.functions import get_object_or_None
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.utils.html import escape
+from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+from emails.models import SentEmail
+from users.forms import (ChangePWForm, LoginForm, PWResetForm,
+                         RegistrationForm, SetPWForm)
+from users.models import AuthUser, LoggedLogin
 from utils import get_client_ip, get_user_agent
 
 
