@@ -10,7 +10,6 @@ from users import views as users_views
 from wallets import views as wallets_views
 
 
-
 urlpatterns = [
     # Logging Test
     url(r'^fail500/$', homepage_views.fail500, name='fail500'),
@@ -66,7 +65,7 @@ urlpatterns = [
 
     # Forwarding Pages (URL hacks)
     url(r'^widgets/$', addresses_views.widget_forwarding, name='widget_forwarding'),
-    url(r'^forwarding/$',addresses_views.forward_forwarding, name='forward_forwarding'),  # awesome name
+    url(r'^forwarding/$', addresses_views.forward_forwarding, name='forward_forwarding'),  # awesome name
     url(r'^subscribe/$', addresses_views.subscribe_forwarding, name='subscribe_forwarding'),
     url(r'^pushtx/$', transactions_views.pushtx_forwarding, name='pushtx_forwarding'),
     url(r'^decodetx/$', transactions_views.decodetx_forwarding, name='decodetx_forwarding'),
@@ -82,4 +81,3 @@ urlpatterns = [
     # So broad it must be last
     url(r'^(?P<coin_symbol>[-\w]+)/$', homepage_views.coin_overview, name='coin_overview')
 ]
-

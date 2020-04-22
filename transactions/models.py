@@ -57,8 +57,8 @@ class OnChainTransaction(models.Model):
                 'num_confs': self.num_confs,
                 }
         if self.address_subscription.address_forwarding_obj:
-                context_dict['destination_address'] = self.address_subscription.address_forwarding_obj.destination_address
-                context_dict['satoshis_transacted'] = self.satoshis_sent
+            context_dict['destination_address'] = self.address_subscription.address_forwarding_obj.destination_address
+            context_dict['satoshis_transacted'] = self.satoshis_sent
         fkey_objs = {
                 'transaction_event': self,
                 'address_subscription': self.address_subscription,
