@@ -1,14 +1,17 @@
 from annoying.decorators import render_to
-from blockcypher.api import (get_block_details, get_block_hash,
-                             get_block_overview, get_latest_block_height)
+from blockcypher.api import get_block_details
+from blockcypher.api import get_block_hash
+from blockcypher.api import get_block_overview
+from blockcypher.api import get_latest_block_height
 from blockcypher.constants import COIN_SYMBOL_MAPPINGS
 from blockcypher.utils import is_valid_hash
-from blockexplorer.decorators import assert_valid_coin_symbol
-from blockexplorer.settings import BLOCKCYPHER_API_KEY
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+
+from blockexplorer.decorators import assert_valid_coin_symbol
+from blockexplorer.settings import BLOCKCYPHER_API_KEY
 from utils import get_max_pages
 
 
